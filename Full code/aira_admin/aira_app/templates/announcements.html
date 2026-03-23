@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Announcements - AIRA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f8ff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #d1e8ff;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo-icon {
+            font-size: 3rem;
+            margin-right: 15px;
+            background: linear-gradient(45deg, #4a90e2, #87ceeb);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        }
+        .logo h1 {
+            color: #2c3e50;
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .logo p {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-left: 15px;
+            padding-left: 15px;
+            border-left: 1px solid #d1e8ff;
+        }
+        .page-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 30px 25px 30px;
+            box-shadow: 0 10px 30px rgba(173, 216, 230, 0.3);
+            border: 1px solid #e1f5fe;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .page-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .page-title i {
+            color: #4a90e2;
+        }
+        .back-link {
+            text-decoration: none;
+            font-size: 0.95rem;
+            color: #4a90e2;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid #d1e8ff;
+            background: #f8fbff;
+        }
+        .back-link:hover {
+            background: #e6f2ff;
+        }
+        .announcement-list {
+            margin-top: 10px;
+        }
+        .announcement-item {
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #e1f5fe;
+            background: #f8fbff;
+            margin-bottom: 10px;
+        }
+        .announcement-item h4 {
+            margin: 0 0 4px 0;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+        .announcement-item p {
+            margin: 0;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+        .announcement-meta {
+            margin-top: 4px;
+            font-size: 0.8rem;
+            color: #a0b9d6;
+        }
+
+        /* ======== NEW: Gallery / Slideshow styles ======== */
+        .gallery-card {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e1f5fe;
+        }
+
+        .gallery-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .gallery-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #2c3e50;
+        }
+
+        .gallery-header i {
+            color: #4a90e2;
+        }
+
+        .slider-container {
+            position: relative;
+            border-radius: 18px;
+            border: 1px solid #e1f5fe;
+            background: #f8fbff;
+            box-shadow: 0 8px 22px rgba(173, 216, 230, 0.3);
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            width: 100%;
+            display: block;
+            border-radius: 18px;
+            object-fit: contain;
+            max-height: 500px;
+            background: #ffffff;
+        }
+
+        .slide-caption {
+            position: absolute;
+            bottom: 10px;
+            left: 12px;
+            right: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: rgba(44, 62, 80, 0.7);
+            color: #ecf0f1;
+            font-size: 0.9rem;
+        }
+
+        .slide-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: rgba(44, 62, 80, 0.4);
+            color: white;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .slide-btn:hover {
+            background: rgba(44, 62, 80, 0.75);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .slide-btn.prev {
+            left: 10px;
+        }
+
+        .slide-btn.next {
+            right: 10px;
+        }
+
+        .dots {
+            text-align: center;
+            padding: 10px 0 8px 0;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 4px;
+            border-radius: 50%;
+            background: #d1e8ff;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .dot.active {
+            background: #4a90e2;
+            transform: scale(1.1);
+        }
+
+        .no-images {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo {
+                flex-direction: column;
+            }
+            .logo p {
+                margin-left: 0;
+                padding-left: 0;
+                border-left: none;
+                border-top: 1px solid #d1e8ff;
+                padding-top: 8px;
+                margin-top: 6px;
+            }
+            .page-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div>
+                <h1>AIRA</h1>
+                <p>AI College Assistant</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-card">
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-bullhorn"></i>
+                <span>Announcements</span>
+            </div>
+            <a href="{% url 'userhome' %}" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Chat
+            </a>
+        </div>
+
+        <!-- ======== NEW: Slideshow / Gallery below announcements ======== -->
+        {% if announcement_images %}
+        <div class="gallery-card">
+            <div class="gallery-header">
+                <i class="fas fa-images"></i>
+                <h3>Announcement Gallery</h3>
+            </div>
+
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    {% for img in announcement_images %}
+                    <div class="slide {% if forloop.first %}active{% endif %}">
+                        <img src="{{ img.image.url }}" alt="{{ img.title|default:'Announcement image' }}">
+                        {% if img.title %}
+                        <div class="slide-caption">{{ img.title }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Navigation buttons -->
+                <button class="slide-btn prev" type="button" onclick="changeSlide(-1)">&#10094;</button>
+                <button class="slide-btn next" type="button" onclick="changeSlide(1)">&#10095;</button>
+            </div>
+
+            <!-- Dots for slide indicators -->
+            <div class="dots">
+                {% for img in announcement_images %}
+                <span class="dot {% if forloop.first %}active{% endif %}" onclick="goToSlide({{ forloop.counter0 }})"></span>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <p class="no-images">No announcement images have been uploaded yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    let slides = [];
+    let dots = [];
+    let autoSlideInterval = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        slides = document.querySelectorAll('.slide');
+        dots = document.querySelectorAll('.dot');
+
+        if (slides.length > 0) {
+            showSlide(0);
+            startAutoSlide();
+        }
+    });
+
+    function showSlide(n) {
+        if (!slides.length) return;
+
+        const total = slides.length;
+        currentSlide = (n + total) % total;
+
+        slides.forEach((slide, index) => {
+            slide.classList.toggle('active', index === currentSlide);
+        });
+
+        if (dots.length) {
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+    }
+
+    function changeSlide(delta) {
+        showSlide(currentSlide + delta);
+        restartAutoSlide();
+    }
+
+    function goToSlide(index) {
+        showSlide(index);
+        restartAutoSlide();
+    }
+
+    /* --------------------------
+       AUTO-SLIDE EVERY 3 SECONDS
+       -------------------------- */
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 3000); // 3 seconds
+    }
+
+    function restartAutoSlide() {
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+    }
+</script>
+</body>
+</html>

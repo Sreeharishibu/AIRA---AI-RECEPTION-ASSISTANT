@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AIRA Analytics - Admin</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f8ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #d1e8ff;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            margin-right: 15px;
+            background: linear-gradient(45deg, #4a90e2, #87ceeb);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .logo h1 {
+            color: #2c3e50;
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-left: 15px;
+            padding-left: 15px;
+            border-left: 1px solid #d1e8ff;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(173, 216, 230, 0.3);
+            border: 1px solid #e1f5fe;
+        }
+
+        .page-header h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-header h2 i {
+            color: #4a90e2;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(173, 216, 230, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4a90e2, #87ceeb);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #36a2db, #5dc9f4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .filters-card {
+            background: white;
+            border-radius: 15px;
+            padding: 18px 20px;
+            box-shadow: 0 8px 24px rgba(173, 216, 230, 0.3);
+            border: 1px solid #e1f5fe;
+            margin-bottom: 20px;
+        }
+
+        .filters-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1 1 160px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #d1e8ff;
+            background: #f8fbff;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #4a90e2;
+            background: #ffffff;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.15);
+        }
+
+        .filters-row .btn {
+            margin-top: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid #e1f5fe;
+            box-shadow: 0 6px 18px rgba(173, 216, 230, 0.25);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .stat-sub {
+            font-size: 0.8rem;
+            color: #a0b9d6;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 16px 16px 10px 16px;
+            border: 1px solid #e1f5fe;
+            box-shadow: 0 8px 24px rgba(173, 216, 230, 0.3);
+        }
+
+        .chart-title {
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-title i {
+            color: #4a90e2;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 260px;
+        }
+
+        .logs-card {
+            background: white;
+            border-radius: 15px;
+            padding: 16px 16px 8px 16px;
+            border: 1px solid #e1f5fe;
+            box-shadow: 0 8px 24px rgba(173, 216, 230, 0.3);
+        }
+
+        .logs-title {
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logs-title i {
+            color: #4a90e2;
+        }
+
+        .logs-table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 8px 8px;
+            border-bottom: 1px solid #f0f8ff;
+            text-align: left;
+        }
+
+        th {
+            background: #f8fbff;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 7px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .tag-matched {
+            background: #e1f5fe;
+            color: #2c3e50;
+        }
+
+        .tag-unmatched {
+            background: #ffe5e5;
+            color: #c0392b;
+        }
+
+        .ai-orb {
+            position: fixed;
+            bottom: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(74, 144, 226, 0.15) 0%, rgba(74, 144, 226, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 4s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        @media (max-width: 900px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                flex-direction: column;
+            }
+
+            .logo p {
+                margin-left: 0;
+                padding-left: 0;
+                border-left: none;
+                border-top: 1px solid #d1e8ff;
+                padding-top: 8px;
+                margin-top: 6px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .header-actions .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="ai-orb"></div>
+<div class="container">
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div>
+                <h1>AIRA</h1>
+                <p>AI College Assistant – Admin Analytics</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h2>
+            <i class="fas fa-chart-line"></i>
+            Analytics Dashboard
+        </h2>
+        <div class="header-actions">
+            <a href="{% url 'query_list' %}" class="btn btn-secondary">
+                <i class="fas fa-list"></i> Query Management
+            </a>
+            <a href="{% url 'home' %}" class="btn btn-primary">
+                <i class="fas fa-home"></i> Admin Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <form method="get" class="filters-card">
+        <div class="filters-row">
+            <div class="filter-group">
+                <label for="start_date">From Date</label>
+                <input type="date" id="start_date" name="start_date" value="{{ start_date }}" max="{% now 'Y-m-d' %}">
+
+            </div>
+            <div class="filter-group">
+                <label for="end_date">To Date</label>
+                <input type="date" id="end_date" name="end_date" value="{{ end_date }}" max="{% now 'Y-m-d' %}">
+            </div>
+            <div class="filter-group">
+                <label for="status">Match Status</label>
+                <select id="status" name="status">
+                    <option value="all" {% if status == 'all' %}selected{% endif %}>All</option>
+                    <option value="matched" {% if status == 'matched' %}selected{% endif %}>Matched Only</option>
+                    <option value="unmatched" {% if status == 'unmatched' %}selected{% endif %}>Unmatched Only</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="period">Time Granularity</label>
+                <select id="period" name="period">
+                    <option value="daily" {% if period == 'daily' %}selected{% endif %}>Daily</option>
+                    <option value="weekly" {% if period == 'weekly' %}selected{% endif %}>Weekly</option>
+                    <option value="monthly" {% if period == 'monthly' %}selected{% endif %}>Monthly</option>
+                </select>
+            </div>
+            <div class="filter-group" style="flex: 0 0 auto;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Apply Filters
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Queries</div>
+            <div class="stat-value">{{ total_queries }}</div>
+            <div class="stat-sub">In current filter range</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Matched Queries</div>
+            <div class="stat-value">{{ matched_count }}</div>
+            <div class="stat-sub">Successfully mapped to a stored query</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Unmatched Queries</div>
+            <div class="stat-value">{{ unmatched_count }}</div>
+            <div class="stat-sub">Returned “Sorry, I didn't understand...”</div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-title">
+                <i class="fas fa-star"></i>
+                Most Frequently Asked Queries
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="topQueriesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-title">
+                <i class="fas fa-history"></i>
+                User Interaction Trends ({{ period|title }})
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent logs -->
+    <div class="logs-card">
+        <div class="logs-title">
+            <i class="fas fa-clock"></i>
+            Recent Interactions (Last 20)
+        </div>
+        <div class="logs-table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>User Query</th>
+                    <th>Matched Query</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for log in recent_logs %}
+                    <tr>
+                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.user_query }}</td>
+                        <td>{{ log.matched_query|default:"—" }}</td>
+                        <td>
+                            {% if log.matched %}
+                                <span class="tag tag-matched">Matched</span>
+                            {% else %}
+                                <span class="tag tag-unmatched">Unmatched</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No logs available for the selected filters.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Data from backend
+    const topQueriesLabels = {{ top_queries_labels_json|safe }};
+    const topQueriesCounts = {{ top_queries_counts_json|safe }};
+    const timeLabels = {{ time_labels_json|safe }};
+    const timeCounts = {{ time_counts_json|safe }};
+
+    // Top Queries Bar Chart
+    const tqCtx = document.getElementById('topQueriesChart').getContext('2d');
+    new Chart(tqCtx, {
+        type: 'bar',
+        data: {
+            labels: topQueriesLabels,
+            datasets: [{
+                label: 'Count',
+                data: topQueriesCounts,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 0,
+                        font: { size: 11 }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+
+    // Interaction Trend Line Chart
+    const trCtx = document.getElementById('trendChart').getContext('2d');
+    new Chart(trCtx, {
+        type: 'line',
+        data: {
+            labels: timeLabels,
+            datasets: [{
+                label: 'Queries',
+                data: timeCounts,
+                tension: 0.3,
+                fill: false,
+                borderWidth: 2,
+                pointRadius: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: { autoSkip: true, maxTicksLimit: 10 }
+                },
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

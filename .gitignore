@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+
+# Database
+db.sqlite3
+
+# Environment
+.env
+
+# Node
+node_modules/
+
+# Vosk Models (IMPORTANT)
+vosk-model*
+Vosk models/
+Full code/Vosk models/
+
+# Certificates
+*.pem
+*.key

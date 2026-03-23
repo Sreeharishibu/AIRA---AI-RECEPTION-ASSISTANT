@@ -1,0 +1,498 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Details - AIRA Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f8ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #d1e8ff;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            font-size: 3rem;
+            margin-right: 15px;
+            background: linear-gradient(45deg, #4a90e2, #87ceeb);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        }
+        
+        .logo h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        
+        .logo p {
+            color: #7f8c8d;
+            font-size: 1rem;
+            margin-left: 15px;
+            padding-left: 15px;
+            border-left: 1px solid #d1e8ff;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(173, 216, 230, 0.3);
+            border: 1px solid #e1f5fe;
+        }
+
+        .page-header h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 26px;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(173, 216, 230, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4a90e2, #87ceeb);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(45deg, #36a2db, #5dc9f4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #e74c3c, #ff7675);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-small {
+            padding: 6px 16px;
+            font-size: 0.85rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 30px rgba(173, 216, 230, 0.3);
+            border: 1px solid #e1f5fe;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.4rem;
+        }
+
+        .card p {
+            margin-bottom: 25px;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        select,
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #d1e8ff;
+            background: #f8fbff;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        select:focus,
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: #4a90e2;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 4px;
+        }
+
+        .form-actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        /* Image grids */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .image-card {
+            background: #f8fbff;
+            border-radius: 12px;
+            border: 1px solid #e1f5fe;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid #d1e8ff;
+        }
+
+        .image-meta {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .image-title {
+            font-size: 0.85rem;
+            color: #2c3e50;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .image-empty {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+
+        .ai-orb {
+            position: fixed;
+            bottom: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(74, 144, 226, 0.15) 0%, rgba(74, 144, 226, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 4s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(135, 206, 235, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                flex-direction: column;
+                margin-bottom: 20px;
+            }
+
+            .logo p {
+                margin-left: 0;
+                padding-left: 0;
+                border-left: none;
+                border-top: 1px solid #d1e8ff;
+                padding-top: 10px;
+                margin-top: 10px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="ai-orb"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div>
+                    <h1>AIRA</h1>
+                    <p>AI College Assistant - Admin Dashboard</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-header">
+            <h2>Add New Details</h2>
+            <div class="header-actions">
+                <a href="{% url 'query_list' %}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Queries
+                </a>
+            </div>
+        </div>
+
+        <!-- Upload form card -->
+        <div class="card">
+            <h3>Upload Announcements / Placement Images</h3>
+            <p>Select a category and upload one or more images. These will be used in the Announcements and Placement pages.</p>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" required>
+                        <option value="">-- Select Category --</option>
+                        <option value="ANNOUNCEMENT">Announcements</option>
+                        <option value="PLACEMENT">Placement</option>
+                    </select>
+                    <div class="hint">Choose where these images belong.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Title / Short Description (optional)</label>
+                    <input type="text" id="title" name="title" placeholder="Eg: Placement Drive 2025">
+                    <div class="hint">This will help you recognize the images later.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="images">Upload Images</label>
+                    <input type="file" id="images" name="images" accept="image/*" multiple required>
+                    <div class="hint">You can select multiple images at once.</div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload Details
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Announcements images card -->
+        <div class="card">
+            <h3>
+                <i class="fas fa-bullhorn" style="color:#4a90e2; margin-right:6px;"></i>
+                Announcement Images
+            </h3>
+
+            {% if announcement_images %}
+                <div class="image-grid">
+                    {% for img in announcement_images %}
+                        <div class="image-card">
+                            <img src="{{ img.image.url }}" alt="{{ img.title|default:'Announcement image' }}">
+                            <div class="image-meta">
+                                <span class="image-title">
+                                    {{ img.title|default:"(No title)" }}
+                                </span>
+                                <form method="POST" action="{% url 'delete_detail_image' img.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-small">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="image-empty">No announcement images uploaded yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Placement images card -->
+        <div class="card">
+            <h3>
+                <i class="fas fa-briefcase" style="color:#4a90e2; margin-right:6px;"></i>
+                Placement Images
+            </h3>
+
+            {% if placement_images %}
+                <div class="image-grid">
+                    {% for img in placement_images %}
+                        <div class="image-card">
+                            <img src="{{ img.image.url }}" alt="{{ img.title|default:'Placement image' }}">
+                            <div class="image-meta">
+                                <span class="image-title">
+                                    {{ img.title|default:"(No title)" }}
+                                </span>
+                                <form method="POST" action="{% url 'delete_detail_image' img.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-small">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="image-empty">No placement images uploaded yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // background particles (same style as other pages)
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 40;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                const duration = Math.random() * 10 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                const delay = Math.random() * 5;
+                particle.style.animationDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        });
+    </script>
+</body>
+</html>
